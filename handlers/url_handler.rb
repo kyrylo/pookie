@@ -326,8 +326,6 @@ class UrlHandler < Marvin::CommandHandler
     502 => "Bad gateway",
     503 => "Service unavailable",
   }
-  
-  URL_MATCHER_RE = %r{(?:(?:f|ht)tps?://.*?)(?:\s|$)}i
 
   IGNORE_NICKS = [
     /^CIA-\d+$/,
@@ -345,7 +343,7 @@ class UrlHandler < Marvin::CommandHandler
 
     p args
 
-    url_list = args[:message].scan(URL_MATCHER_RE)
+    url_list = URI.extract(args[:message], ["http", "https", "ftp"])
 
     url_list.each do |url|
       logger.info "Getting info for #{url}..."
